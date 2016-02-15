@@ -1,0 +1,12 @@
+{
+    "name": "danielgelling/pluginchecker",
+    "description": "This plugin checks all plugins and themes for abnormalities and send out an e-mail if found.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Gelling",
+            "email": "info@danielgelling.nl"
+        }
+    ],
+    "require": {}
+}
