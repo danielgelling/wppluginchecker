@@ -1,6 +1,6 @@
 {
-    "name": "danielgelling/pluginchecker",
-    "description": "This plugin checks installed plugins for abnormalities as vulnerabilities for infection and hackability. It also checks for plugin updates. It sends out an e-mail if an abnormality or update is detected. ",
+    "name": "danielgelling/wppluginchecker",
+    "description": "This plugin checks installed plugins for abnormalities as vulnerabilities for infection and hackability. It also checks for plugin updates. It sends out an e-mail if an abnormality or update is detected.",
     "license": "MIT",
     "authors": [
         {
