@@ -25,6 +25,8 @@ use Illuminate\Database\Capsule\Manager as Capsule;
  * Load the javascript every hour after a check has finished.
  */
 
+// dd(Carbon::createFromTimestamp(strtotime(get_option('last_plugins_check', Carbon::now('Europe/Amsterdam')))));
+
 $lastCheck = Carbon::createFromTimestamp(strtotime(get_option('last_plugins_check', Carbon::now('Europe/Amsterdam'))));
 
 if($lastCheck->diffInMinutes() >= 60)

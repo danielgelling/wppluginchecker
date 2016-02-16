@@ -117,38 +117,42 @@ class PluginChecker
                     'data' => $occurrence['data']
                 ];
         }
-// dd('this->occ:', $this->occurrences, 'files:', $files, 'new occ:', $newOccurrences);
-        $occurrences = count($this->occurrences) - $lastCheck->occurrences;
-
-        if($occurrences != count($newOccurrences));
-            //Something went terribly wrong
 
         $occurrenceText = "";
 
         foreach($newOccurrences as $key => $newOccurrence)
             $occurrenceText .= "<b>" . ($key + 1) . ". " . $newOccurrence['file'] . ":</b> <br /><br />" . $newOccurrence['data'] . "<br /><br /><br />";
 
-        $message = 
-        "Dear webmaster, <br /><br /> " . $occurrences . 
-        " new possible security vulnerabilit" . 
-        ($occurrences == 1 ? "y was" : "ies have been" ) . 
-        " found in " . get_site_url() . ". This occurred in the following file" .
-        ($occurrences == 1 ? "" : "s" ) . ":<br /><br />" . 
-        "<b>" .$occurrenceText . "</b><br />" .
-        "Please go check your source code immediately!<br /><br />" .
-        "<br /><br /> WPPluginChecker Plugin<br /><br /><br />" .
-        "DISCLAIMER:<br /><br />" .
-        "This is an automatically generated message by the Wordpress plugin WPPluginChecker. <br /><br />In no event the authors of this plugin can he held liable for any indirect, incidential or consequential damages of any kind. This sofware is provided \"as is\" and without warranty of any kind.";
+        $occurrences = count($this->occurrences) - $lastCheck->occurrences;
+
+        if($occurrences != count($newOccurrences))
+        {
+            $message = 
+            "Dear webmaster, <br /><br /> " . $occurrences . 
+            "Something went terribly wrong. We couldn't verify the amount of serurity vulnerabilities occurrences." .
+            "Please go check your source code immediately!<br /><br />" .
+            "<br /><br /> WPPluginChecker Plugin<br /><br /><br />" .
+            "DISCLAIMER:<br /><br />" .
+            "This is an automatically generated message by the Wordpress plugin WPPluginChecker. <br /><br />In no event the authors of this plugin can he held liable for any indirect, incidential or consequential damages of any kind. This sofware is provided \"as is\" and without warranty of any kind.";
+        }
+        else
+        {
+            $message = 
+            "Dear webmaster, <br /><br /> " . $occurrences . 
+            " new possible security vulnerabilit" . 
+            ($occurrences == 1 ? "y was" : "ies have been" ) . 
+            " found in " . get_site_url() . ". This occurred in the following file" .
+            ($occurrences == 1 ? "" : "s" ) . ":<br /><br />" . 
+            "<b>" .$occurrenceText . "</b><br />" .
+            "Please go check your source code immediately!<br /><br />" .
+            "<br /><br /> WPPluginChecker Plugin<br /><br /><br />" .
+            "DISCLAIMER:<br /><br />" .
+            "This is an automatically generated message by the Wordpress plugin WPPluginChecker. <br /><br />In no event the authors of this plugin can he held liable for any indirect, incidential or consequential damages of any kind. This sofware is provided \"as is\" and without warranty of any kind.";
+        }
 
         $recipient = \get_option('admin_email', 'josse@deaannemers.nl');
 
-        $recipient = "daniel@deaannemers.nl";
-
-        // Hook not needed anymore?
-
-        // \add_action('plugins_loaded', function() use ($message, $recipient) {
-            \wp_mail($recipient, 'New security vulnerability found!', $message, "Content-type: text/html");
-        // });
+        \wp_mail($recipient, 'New security vulnerability found!', $message, "Content-type: text/html");
 
         $this->result['emailSent'] = true;
     }
