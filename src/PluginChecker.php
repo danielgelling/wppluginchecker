@@ -25,7 +25,7 @@ class PluginChecker
     public function run()
     {
         $start = microtime(true);
-        $this->checkFiles('./');
+        $this->checkFiles(dirname(__FILE__) . '/../../../../');
         $this->checkForChanges();
         $this->result['duration'] = microtime(true) - $start;
     }
@@ -84,7 +84,7 @@ class PluginChecker
         else
             $this->result['panic'] = false;
 
-        // dd($this->result);
+        update_option('last_plugins_check', Carbon::now('Europe/Amsterdam'));
     }
 
     public function update()
@@ -117,8 +117,7 @@ class PluginChecker
                     'data' => $occurrence['data']
                 ];
         }
-
-
+// dd('this->occ:', $this->occurrences, 'files:', $files, 'new occ:', $newOccurrences);
         $occurrences = count($this->occurrences) - $lastCheck->occurrences;
 
         if($occurrences != count($newOccurrences));
@@ -126,26 +125,31 @@ class PluginChecker
 
         $occurrenceText = "";
 
-        foreach($newOccurrences as $newOccurrence)
-            $occurrenceText .= $newOccurrence['file'] . ": \n" . $newOccurrence['data'] . "\n\n";
+        foreach($newOccurrences as $key => $newOccurrence)
+            $occurrenceText .= "<b>" . ($key + 1) . ". " . $newOccurrence['file'] . ":</b> <br /><br />" . $newOccurrence['data'] . "<br /><br /><br />";
 
         $message = 
-        "Dear webmaster, \n\n " . $occurrences . 
+        "Dear webmaster, <br /><br /> " . $occurrences . 
         " new possible security vulnerabilit" . 
         ($occurrences == 1 ? "y was" : "ies have been" ) . 
-        " found. This occurred in the following file" .
-        ($occurrences == 1 ? "" : "s" ) . ":" . 
-        "Please go check them immediately!\n\n
-        --- \n WPPluginChecker Plugin";
+        " found in " . get_site_url() . ". This occurred in the following file" .
+        ($occurrences == 1 ? "" : "s" ) . ":<br /><br />" . 
+        "<b>" .$occurrenceText . "</b><br />" .
+        "Please go check your source code immediately!<br /><br />" .
+        "<br /><br /> WPPluginChecker Plugin<br /><br /><br />" .
+        "DISCLAIMER:<br /><br />" .
+        "This is an automatically generated message by the Wordpress plugin WPPluginChecker. <br /><br />In no event the authors of this plugin can he held liable for any indirect, incidential or consequential damages of any kind. This sofware is provided \"as is\" and without warranty of any kind.";
 
+        $recipient = \get_option('admin_email', 'josse@deaannemers.nl');
 
-        $recipient = "info@danielgelling.nl";
+        $recipient = "daniel@deaannemers.nl";
 
-        \add_action('plugins_loaded', function() use ($message, $recipient) {
-            \wp_mail($recipient, 'New security vulnerability found!', $message);
-        });
+        // Hook not needed anymore?
+
+        // \add_action('plugins_loaded', function() use ($message, $recipient) {
+            \wp_mail($recipient, 'New security vulnerability found!', $message, "Content-type: text/html");
+        // });
 
         $this->result['emailSent'] = true;
     }
-
 }
