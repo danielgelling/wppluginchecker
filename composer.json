@@ -1,6 +1,6 @@
 {
     "name": "danielgelling/pluginchecker",
-    "description": "This plugin checks all plugins and themes for abnormalities and send out an e-mail if found.",
+    "description": "This plugin checks installed plugins for abnormalities as vulnerabilities for infection and hackability. It also checks for plugin updates. It sends out an e-mail if an abnormality or update is detected. ",
     "license": "MIT",
     "authors": [
         {
@@ -8,5 +8,14 @@
             "email": "info@danielgelling.nl"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "5.5.*",
+        "illuminate/database": "5.2.7",
+        "nesbot/carbon": "~1.14"
+    },
+    "autoload": {
+        "psr-4": {
+            "DanielGelling\\": "src/"
+        }
+    }
 }
